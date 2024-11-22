@@ -25,30 +25,41 @@ function App() {
 }
 
 function Accordion({ data }) {
+  const [selectedAccordion, setSelectedAccordion] = useState(null);
+
+  const handleSelect = (index) => {
+    selectedAccordion === index
+      ? setSelectedAccordion(null)
+      : setSelectedAccordion(index);
+  };
+
   return (
     <div className="accordion-container">
-      {data.map((el, i) => (
-        <AccordionItem key={i} num={i} title={el.title} text={el.text} />
+      {data.map((el, index) => (
+        <AccordionItem
+          key={index}
+          num={index}
+          title={el.title}
+          text={el.text}
+          selectedAccordion={selectedAccordion}
+          onClick={() => handleSelect(index)}
+        />
       ))}
     </div>
   );
 }
 
-function AccordionItem({ num, title, text }) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleToggle = () => {
-    setIsOpen((isOpen) => !isOpen);
-  };
+function AccordionItem({ num, title, text, selectedAccordion, onClick }) {
+  const isOpen = num === selectedAccordion;
 
   return (
-    <div className={`item ${isOpen ? "open" : ""}`}>
+    <div className={`item ${isOpen && "open"}`}>
       <p className="number">0{num + 1}</p>
       <div className="item-question-answer">
         <p className="text">{title}</p>
-        <p className="content-box">{isOpen ? text : ""}</p>
+        <p className="content-box">{isOpen && text}</p>
       </div>
-      <p className="icon" onClick={handleToggle}>
+      <p className="icon" onClick={onClick}>
         {isOpen ? "-" : "+"}
       </p>
     </div>
